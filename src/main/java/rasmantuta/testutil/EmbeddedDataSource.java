@@ -19,6 +19,42 @@ import org.junit.runners.model.FrameworkMethod;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
+import javax.sql.DataSource;
+
+/**
+ * The EmbeddedDataSource Rule makes a Spring EmbeddedDatabase available for test methods:
+ *
+ * <pre>
+ * public class UserDaoTest{
+ *     UserDao dao = null;
+ *     &#064Rule
+ *     public EmbeddedDataSource embeddedDataSource = new EmbeddedDataSource("testdata/DatabaseSchema.sql", "testdata/DefaultTestData.sql");
+ *
+ *     &#064Before
+ *     public void setUp() {
+ *         dao = new UserDao(embeddedDataSource.getDataSource());
+ *     }
+ *
+ *     &#064Test
+ *     public void testIsInRole() throws Exception {
+ *         assertTrue(dao.isInRole("admin", "administrator"));
+ *         assertTrue(dao.isInRole("admin", "everyone"));
+ *     }
+ *
+ *     &#064Test
+ *     &#064DataSet("testdata/findUsersInRoleBugTestData.sql")
+ *     public void findUsersInRoleBug() throws Exception {
+ *         assertFalse(dao.isInRole("guest", "admin"));
+ *         assertTrue(dao.isInRole("guest", "everyone"));
+ *     }
+ * }
+ * </pre>
+ *
+ * For the EmbeddedDataSource to be available in &#064Before annotated method, junit version 4.8 or later must be used.
+ *
+ * To use a custom Schema or DataSet, annotate the test method with &#064Schema or &#064DataSet.
+ */
+
 public class EmbeddedDataSource extends TestWatchman {
     private String schema;
     private String dataSet;
@@ -47,15 +83,32 @@ public class EmbeddedDataSource extends TestWatchman {
         dataSource.shutdown();
     }
 
+    /**
+     * Returns the schema configured with this instance of EmbeddedDataSource.
+     *
+     * Could be the scheme set in the constructor or by the @Schema annotation.
+     * @return the Schema
+     */
     public String getSchema() {
         return schema;
     }
 
+    /**
+     * Returns the dataSet configured with this instance of EmbeddedDataSource.
+     *
+     * Could be the dataSet set in the constructor or by the @DataSet annotation.
+     * @return the DataSet
+     */
     public String getDataSet() {
         return dataSet;
     }
 
-    public EmbeddedDatabase getDataSource() {
+    /**
+     * The EmbeddedDatabase configured with the Schema and DataSet provided in constructor or annotated.
+     *
+     * @return the EmbeddedDatabase
+     */
+    public DataSource getDataSource() {
         return dataSource;
     }
 }
