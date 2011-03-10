@@ -20,6 +20,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 import javax.sql.DataSource;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * The EmbeddedDataSource Rule makes a Spring EmbeddedDatabase available for test methods:
@@ -110,5 +114,23 @@ public class EmbeddedDataSource extends TestWatchman {
      */
     public DataSource getDataSource() {
         return dataSource;
+    }
+
+    /**
+     * Use this annotation on a test method to specify a different database schema for a single test.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public static @interface Schema {
+        String value();
+    }
+
+    /**
+     * Use this annotation on a test method to specify a different data set for a single test.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public static @interface DataSet {
+        String value();
     }
 }

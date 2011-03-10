@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import rasmantuta.testutil.DataSet;
 import rasmantuta.testutil.EmbeddedDataSource;
 
 public class UserDaoTest{
@@ -40,7 +39,7 @@ public class UserDaoTest{
 
 
     @Test
-    @DataSet("testdata/findUsersInRoleBugTestData.sql")
+    @EmbeddedDataSource.DataSet("testdata/findUsersInRoleBugTestData.sql")
     public void findUsersInRoleBug() throws Exception {
         assertFalse(dao.isInRole("guest", "admin"));
         assertTrue(dao.isInRole("guest", "everyone"));

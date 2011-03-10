@@ -29,7 +29,7 @@ public class EmbeddedDataSourceTest {
     public EmbeddedDataSource dataSource = new EmbeddedDataSource(DATABASE_SCHEMA_SQL, DEFAULT_TEST_DATA_SQL);
 
     @Test
-    @DataSet(SIMPLE_TEST_DATA_SQL)
+    @EmbeddedDataSource.DataSet(SIMPLE_TEST_DATA_SQL)
     public void simpleTest() {
         assertEquals(SIMPLE_TEST_DATA_SQL, dataSource.getDataSet());
         assertEquals(DATABASE_SCHEMA_SQL, dataSource.getSchema());
@@ -48,7 +48,7 @@ public class EmbeddedDataSourceTest {
     }
 
     @Test
-    @Schema(CUSTOM_DATABASE_SCHEMA_SQL)
+    @EmbeddedDataSource.Schema(CUSTOM_DATABASE_SCHEMA_SQL)
     public void customSchemaTest() {
         assertEquals(DEFAULT_TEST_DATA_SQL, dataSource.getDataSet());
         assertEquals(CUSTOM_DATABASE_SCHEMA_SQL, dataSource.getSchema());
